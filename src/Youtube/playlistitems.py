@@ -1,6 +1,5 @@
 '''
-Script to experiment with the Youtube Data API.
-Retrieval of playlist(s) from authenticated account.
+Retrieval of playlist videos from authenticated account.
 '''
 
 # pylint: disable=E1101
@@ -12,10 +11,9 @@ import googleapiclient.errors
 
 scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
 
-'''
-Function that obtains data of Youtube playlists from account via Google OAuth 2.0 credentials.
-'''
-def get_playlist():
+def get_playlistItems(playlistID):
+    ''' Function that retrieves video items from select Youtube playlist, 
+    from account via Google OAuth 2.0 credentials. '''
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -32,12 +30,13 @@ def get_playlist():
     youtube = googleapiclient.discovery.build(
         api_service_name, api_version, credentials=credentials)
 
-    request = youtube.playlists().list(
-        part="snippet,contentDetails",
-        mine=True
+    request = youtube.playlistItems().list(
+        part = "snippet,contentDetails",
+        playlistId = playlistID,
+        maxResults = 50
     )
     response = request.execute()
     print(response)
 
 if __name__ == "__main__":
-    get_playlist()
+    get_playlistItems(input("Provide playlist ID:\n"))
