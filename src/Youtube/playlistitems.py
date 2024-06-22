@@ -3,6 +3,8 @@ Retrieval of playlist videos from authenticated account.
 '''
 
 # pylint: disable=E1101
+# pylint: disable=C0103
+# pylint: disable=R0801
 
 import os
 import google_auth_oauthlib.flow
@@ -10,8 +12,10 @@ import googleapiclient.discovery
 import googleapiclient.errors
 
 scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+video_list = []
 
-def get_playlistItems(playlistID):
+
+def get_playlist_items(playlistID):
     ''' Function that retrieves video items from select Youtube playlist, 
     from account via Google OAuth 2.0 credentials. '''
     # Disable OAuthlib's HTTPS verification when running locally.
@@ -31,12 +35,36 @@ def get_playlistItems(playlistID):
         api_service_name, api_version, credentials=credentials)
 
     request = youtube.playlistItems().list(
-        part = "snippet,contentDetails",
+        part = "contentDetails",
         playlistId = playlistID,
         maxResults = 50
     )
     response = request.execute()
-    print(response)
+    next_page_token = extract_data(response)
+    
+    while True:
+        try:
+            request = youtube.playlistItems().list(
+                part = "contentDetails",
+                playlistId = playlistID,
+                maxResults = 50,
+                pageToken = next_page_token
+            )
+            response = request.execute()
+            next_page_token = extract_data(response)
+        except KeyError:
+            break
+    print(len(video_list))
+
+
+def extract_data(full_data):
+    ''' Function for extracting proceeding page tokens and video IDs
+    from content details '''
+    for item in full_data["items"]:
+        video_list.append(item["contentDetails"]["videoId"])
+    next_page_token = full_data["nextPageToken"]
+    return next_page_token
+
 
 if __name__ == "__main__":
-    get_playlistItems(input("Provide playlist ID:\n"))
+    get_playlist_items(input("Provide playlist ID:\n"))
