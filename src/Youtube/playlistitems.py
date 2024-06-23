@@ -15,7 +15,7 @@ scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
 video_list = []
 
 
-def get_playlist_items(playlistID):
+def get_playlist_items():
     ''' Function that retrieves video items from select Youtube playlist, 
     from account via Google OAuth 2.0 credentials. '''
     # Disable OAuthlib's HTTPS verification when running locally.
@@ -24,6 +24,7 @@ def get_playlist_items(playlistID):
 
     api_service_name = "youtube"
     api_version = "v3"
+    playlistID = input("Provide playlist ID:\n")
     client_secrets_file = input("Filename for OAuth 2.0 credentials:\n")
 
     # Get credentials and create an API client
@@ -41,7 +42,8 @@ def get_playlist_items(playlistID):
     )
     response = request.execute()
     next_page_token = extract_data(response)
-    
+
+    # Iterate through pages in playlist
     while True:
         try:
             request = youtube.playlistItems().list(
@@ -55,6 +57,7 @@ def get_playlist_items(playlistID):
         except KeyError:
             break
     print(len(video_list))
+    return video_list
 
 
 def extract_data(full_data):
@@ -67,4 +70,4 @@ def extract_data(full_data):
 
 
 if __name__ == "__main__":
-    get_playlist_items(input("Provide playlist ID:\n"))
+    get_playlist_items()
