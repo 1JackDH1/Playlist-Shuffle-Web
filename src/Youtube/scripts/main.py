@@ -1,3 +1,5 @@
+''' Main program file '''
+
 import playlistitems
 from shuffle import random_shuffle
 
