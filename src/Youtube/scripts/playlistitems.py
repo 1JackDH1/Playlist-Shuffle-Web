@@ -10,6 +10,7 @@ import os
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+import verification
 
 scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
 video_list = []
@@ -24,7 +25,7 @@ def get_playlist_items() -> list[str]:
 
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = user_file_verification()
+    client_secrets_file = verification.credential_file_verification()
     playlistID = input("Provide playlist ID:\n")
 
     # Get credentials and create an API client
@@ -67,22 +68,6 @@ def extract_data(full_data) -> str:
         video_list.append(item["contentDetails"]["videoId"])
     next_page_token = full_data["nextPageToken"]
     return next_page_token
-
-
-def user_file_verification():
-    ''' Verification of user input file. Checking for FileNotFoundError
-    and if the file provided is empty. '''
-    while True:
-        try:
-            client_secrets_file = input("Filename for OAuth 2.0 credentials:\n")
-            client_file_size = os.stat(client_secrets_file).st_size
-            if(client_file_size == 0):
-                print("File provided is empty.")
-        except FileNotFoundError as err:
-            print("File not found or incompatible.")
-        else:
-            break
-    return client_secrets_file
 
 
 if __name__ == "__main__":

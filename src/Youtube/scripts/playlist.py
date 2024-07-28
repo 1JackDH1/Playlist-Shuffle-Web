@@ -10,10 +10,11 @@ import os
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+import verification
 
 scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
 
-def get_playlist():
+def get_playlist() -> dict:
     ''' Function that obtains data of Youtube playlists from account 
     via Google OAuth 2.0 credentials. '''
     # Disable OAuthlib's HTTPS verification when running locally.
@@ -22,7 +23,7 @@ def get_playlist():
 
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = input("Filename for OAuth 2.0 credentials:\n")
+    client_secrets_file = verification.credential_file_verification()
 
     # Get credentials and create an API client
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
@@ -37,6 +38,7 @@ def get_playlist():
         mine = True
     )
     response = request.execute()
+    print(type(response))
     print(response)
 
 if __name__ == "__main__":
