@@ -14,7 +14,7 @@ import verification
 
 scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
 
-def get_playlist() -> dict:
+def get_playlist() -> list[str]:
     ''' Function that obtains data of Youtube playlists from account 
     via Google OAuth 2.0 credentials. '''
     # Disable OAuthlib's HTTPS verification when running locally.
@@ -38,8 +38,22 @@ def get_playlist() -> dict:
         mine = True
     )
     response = request.execute()
-    print(type(response))
-    print(response)
+    print(extract_ids(response))
+
+
+def extract_ids(full_data) -> list[str] | None:
+    ''' Function for extraction of playlist IDs from playlist content. '''
+    id_list = []
+    try:
+        for item in full_data["items"]:
+            id_list.append(item["id"])
+    except KeyError:
+        print("Key error or no playlists present.")
+    if not id_list:
+        return None
+    else:
+        return id_list
+
 
 if __name__ == "__main__":
     get_playlist()
