@@ -5,6 +5,7 @@ Retrieval of playlist(s) from authenticated account.
 
 # pylint: disable=E1101
 # pylint: disable=R0801
+# pylint: disable=R1705
 
 import os
 import google_auth_oauthlib.flow
@@ -38,7 +39,7 @@ def get_playlist() -> list[str]:
         mine = True
     )
     response = request.execute()
-    print(extract_ids(response))
+    return extract_ids(response)
 
 
 def extract_ids(full_data) -> list[str] | None:

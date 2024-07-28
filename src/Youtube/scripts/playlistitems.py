@@ -57,7 +57,6 @@ def get_playlist_items() -> list[str]:
             next_page_token = extract_data(response)
         except KeyError:
             break
-    print(len(video_list))
     return video_list
 
 
