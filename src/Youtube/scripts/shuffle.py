@@ -4,7 +4,7 @@
 
 from random import shuffle
 
-def random_shuffle(shuffle_list):
+def random_shuffle(shuffle_list) -> list[str]:
     ''' Simple function for in-place shuffling,
     random shuffle implements the Fisher-Yates shuffle'''
     try:
