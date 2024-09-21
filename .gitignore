@@ -3,3 +3,5 @@ obj/
 bin/
 __pycache__/
 UI/
+Playlist-Shuffle.sln
+id_list.txt

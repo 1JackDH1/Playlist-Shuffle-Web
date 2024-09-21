@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "Temp-Ext",
+    "version": "1.0",
+  
+    "description": "Test extension",
+
+    "permissions": ["activeTab"],
+
+    "browser_action": {
+      "default_title": "Main",
+      "default_popup": "index.html"
+    }
+  }  

@@ -1,0 +1,10 @@
+html,
+body {
+  width: 1000px;
+  height: 1000px;
+}
+
+div {
+    width: 900px;
+    height: 700px;
+}
