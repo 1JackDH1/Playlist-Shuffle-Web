@@ -15,9 +15,9 @@ def main():
     shuffled_list = random_shuffle(video_id_list)
     print(len(shuffled_list))
 
-    with open("id_list.txt", "w") as file:
-        for id in shuffled_list:
-            file.write(id + "\n")
+    with open("id_list.txt", "w", encoding="utf-8") as file:
+        for vid_id in shuffled_list:
+            file.write(vid_id + "\n")
 
 
 if __name__ == "__main__":
